@@ -137,7 +137,7 @@ namespace AuxiliaryTools.M3U8
             return lst.ToArray();
         }
 
-        public static void SaveToFile(M3U8File m3u8, string filename, bool keepurl = true)
+        public static string GetM3U8Content(M3U8File m3u8, bool keepurl)
         {
             StringBuilder sb = new StringBuilder();
             var maxd = m3u8.Segments.Max(p => p.Seconds);
@@ -181,7 +181,13 @@ namespace AuxiliaryTools.M3U8
                 }
             }
             sb.Append("#EXT-X-ENDLIST\n");
-            File.WriteAllText(filename, sb.ToString());
+            return sb.ToString();
+        }
+
+        public static void SaveToFile(M3U8File m3u8, string filename, bool keepurl = true)
+        {
+            var content = GetM3U8Content(m3u8, keepurl);
+            File.WriteAllText(filename, content);
         }
 
         #endregion Methods

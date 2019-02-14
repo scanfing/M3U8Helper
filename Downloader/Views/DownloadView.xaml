@@ -26,11 +26,11 @@
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Label VerticalAlignment="Center" Content="Source:" />
-            <Label Grid.Row="1"
-                   VerticalAlignment="Center"
-                   Content="Fix Url:"
-                   IsEnabled="{Binding Path=IsLocalFile}" />
+            <TextBlock VerticalAlignment="Center" Text="Source:" />
+            <TextBlock Grid.Row="1"
+                       VerticalAlignment="Center"
+                       IsEnabled="{Binding Path=IsLocalFile}"
+                       Text="Fix Url:" />
             <TextBox x:Name="Txt_Url"
                      Margin="65,5,80,5"
                      VerticalAlignment="Center"
@@ -78,6 +78,8 @@
                                 <StackPanel Margin="0,5" DataContext="{Binding Path=SelectedM3U8.Head}">
                                     <DockPanel>
                                         <CheckBox x:Name="CKB_IsEncrypt"
+                                                  VerticalAlignment="Center"
+                                                  VerticalContentAlignment="Center"
                                                   Content="IsEncrypt"
                                                   IsChecked="{Binding Path=IsEncrypt}" />
                                         <Label Margin="20,0,0,0" Content="EncryptMethod:" />
@@ -277,7 +279,15 @@
                                 </StackPanel>
                             </Grid>
                         </Grid>
-
+                    </TabItem>
+                    <TabItem Header="Content">
+                        <Grid VerticalAlignment="Stretch">
+                            <TextBox Height="Auto"
+                                     Margin="0,30,0,0"
+                                     VerticalAlignment="Stretch"
+                                     IsReadOnly="True"
+                                     Text="{Binding M3U8Content}" />
+                        </Grid>
                     </TabItem>
                 </TabControl>
             </Grid>

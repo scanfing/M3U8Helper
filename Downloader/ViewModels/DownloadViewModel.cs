@@ -26,9 +26,9 @@ namespace M3U8Downloader.ViewModels
         private bool _isAnalyzing = false;
         private bool _isSaveListFile = false;
         private bool _isSkipExistFile = false;
+        private string _m3U8Content = "";
         private string _savePath = "";
         private M3U8FileModel _selectedM3U8 = null;
-
         private M3U8Segment _selectedNode = null;
 
         private string _selectedNodeFullPath = "";
@@ -103,6 +103,12 @@ namespace M3U8Downloader.ViewModels
             set => SetProperty(ref _isSkipExistFile, value);
         }
 
+        public string M3U8Content
+        {
+            get => _m3U8Content;
+            set => SetProperty(ref _m3U8Content, value);
+        }
+
         public ObservableCollection<M3U8FileModel> M3U8Source { get; private set; }
 
         public string SavePath
@@ -118,16 +124,14 @@ namespace M3U8Downloader.ViewModels
             {
                 if (SetProperty(ref _selectedM3U8, value))
                 {
+                    if (value != null)
+                    {
+                        M3U8Content = M3U8Helper.GetM3U8Content(_selectedM3U8.SourceTarget, true);
+                    }
                     StateText = "";
                     RaisePropertyChanged(nameof(CanEdit));
                 }
             }
-        }
-
-        public string SelectedNodeFullPath
-        {
-            get => _selectedNodeFullPath;
-            private set => SetProperty(ref _selectedNodeFullPath, value);
         }
 
         public M3U8Segment SelectedNode
@@ -141,6 +145,12 @@ namespace M3U8Downloader.ViewModels
                         SelectedNodeFullPath = Path.Combine(SelectedM3U8.SavePath, _selectedNode.SegmentName);
                 }
             }
+        }
+
+        public string SelectedNodeFullPath
+        {
+            get => _selectedNodeFullPath;
+            private set => SetProperty(ref _selectedNodeFullPath, value);
         }
 
         public string StateText

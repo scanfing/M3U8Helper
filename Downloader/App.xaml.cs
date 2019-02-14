@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace AuxiliaryTools.M3U8Downloader
+namespace M3U8Downloader
 {
     /// <summary>
     /// App.xaml 的交互逻辑
