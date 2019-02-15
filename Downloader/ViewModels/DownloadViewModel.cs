@@ -11,6 +11,7 @@ using System.Windows.Input;
 using AuxiliaryTools.M3U8;
 using M3U8Downloader.Infrastruction;
 using M3U8Downloader.Model;
+using Microsoft.Win32;
 
 namespace M3U8Downloader.ViewModels
 {
@@ -27,6 +28,7 @@ namespace M3U8Downloader.ViewModels
         private bool _isKeepM3U8ContentSrcUrl = true;
         private bool _isSkipExistFile = false;
         private string _m3U8Content = "";
+        private SaveFileDialog _saveFileDialog;
         private string _savePath = "";
         private M3U8FileModel _selectedM3U8 = null;
         private M3U8Segment _selectedNode = null;
@@ -55,6 +57,7 @@ namespace M3U8Downloader.ViewModels
             CommandCombine = new WpfCommand(OnCommbine, CanCombine);
 
             CommandRefreshM3U8Content = new WpfCommand(OnRefreshM3U8Content, CanRefreshM3U8Content);
+            CommandSaveM3U8ContentToFile = new WpfCommand(OnSaveContentToFile, CanSaveContentToFile);
         }
 
         #endregion Constructors
@@ -71,7 +74,9 @@ namespace M3U8Downloader.ViewModels
 
         public ICommand CommandDownload { get; private set; }
 
-        public WpfCommand CommandRefreshM3U8Content { get; private set; }
+        public ICommand CommandRefreshM3U8Content { get; private set; }
+
+        public ICommand CommandSaveM3U8ContentToFile { get; private set; }
 
         public ICommand CommandViewPath { get; private set; }
 
@@ -129,6 +134,7 @@ namespace M3U8Downloader.ViewModels
                 if (SetProperty(ref _selectedM3U8, value))
                 {
                     StateText = "";
+                    M3U8Content = "";
                     RaisePropertyChanged(nameof(CanEdit));
                 }
             }
@@ -186,6 +192,11 @@ namespace M3U8Downloader.ViewModels
         private bool CanRefreshM3U8Content()
         {
             return true;
+        }
+
+        private bool CanSaveContentToFile()
+        {
+            return !string.IsNullOrEmpty(M3U8Content);
         }
 
         private bool CanViewPath(string path)
@@ -336,6 +347,34 @@ namespace M3U8Downloader.ViewModels
             if (SelectedM3U8 != null)
             {
                 M3U8Content = M3U8Helper.GetM3U8Content(SelectedM3U8.SourceTarget, IsKeepM3U8ContentSrcUrl);
+            }
+        }
+
+        private void OnSaveContentToFile()
+        {
+            _saveFileDialog = new SaveFileDialog
+            {
+                DefaultExt = ".m3u8",
+                CheckPathExists = true,
+                OverwritePrompt = true,
+                Filter = "M3U8列表文件|*.m3u8",
+                Title = "另存为"
+            };
+            _saveFileDialog.InitialDirectory = SavePath;
+            _saveFileDialog.FileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+            if (_saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    File.WriteAllText(_saveFileDialog.FileName, M3U8Content);
+                    SelectedM3U8.StateText = $"Save Content Success:{_saveFileDialog.FileName}";
+                    StateText = $"Save Content Success:{_saveFileDialog.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    SelectedM3U8.StateText = $"Save Content Error:{ex.Message}";
+                    StateText = $"Save Content Error:{ex.Message}";
+                }
             }
         }
 
