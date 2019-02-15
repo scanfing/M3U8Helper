@@ -8,6 +8,7 @@
         Title="M3U8 Downloader"
         Width="800"
         Height="550"
+        MinHeight="526"
         FontFamily="Microsoft YaHei"
         FontSize="14"
         WindowStartupLocation="CenterScreen"
@@ -38,14 +39,14 @@
                      Text="{Binding Path=CurrUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox x:Name="Txt_FixUrl"
                      Grid.Row="1"
-                     Margin="65,5,80,5"
+                     Margin="65,5,80,4"
                      VerticalAlignment="Center"
                      VerticalContentAlignment="Center"
                      IsEnabled="{Binding Path=IsLocalFile}"
                      Text="{Binding Path=FixUrl}" />
             <Button x:Name="Btn_Download"
                     Grid.RowSpan="2"
-                    Margin="5,5"
+                    Margin="4,4"
                     HorizontalAlignment="Right"
                     Background="White"
                     BorderBrush="Gray"
@@ -74,8 +75,12 @@
                 <TabControl>
                     <TabItem Header="Header">
                         <Grid Grid.Row="0">
-                            <StackPanel Margin="5">
-                                <StackPanel Margin="0,5" DataContext="{Binding Path=SelectedM3U8.Head}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="4">
+                                <StackPanel Margin="0,4" DataContext="{Binding Path=SelectedM3U8.Head}">
                                     <DockPanel>
                                         <CheckBox x:Name="CKB_IsEncrypt"
                                                   VerticalAlignment="Center"
@@ -212,6 +217,12 @@
                                             Content="Combine" />
                                 </Grid>
                             </StackPanel>
+                            <TextBox Grid.Row="1"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalContentAlignment="Center"
+                                     BorderThickness="0"
+                                     IsReadOnly="True"
+                                     Text="{Binding SelectedM3U8.StateText}" />
                         </Grid>
                     </TabItem>
                     <TabItem VerticalAlignment="Stretch" Header="Segments">
@@ -286,7 +297,7 @@
                                 <Button VerticalAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Command="{Binding CommandRefreshM3U8Content}"
-                                        Content="Refresh" />
+                                        Content="Generate" />
                             </StackPanel>
                             <ScrollViewer Margin="0,35,0,0">
                                 <TextBox Height="Auto"
