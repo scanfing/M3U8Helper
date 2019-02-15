@@ -24,7 +24,7 @@ namespace M3U8Downloader.ViewModels
         private DownloadHelper _downloader;
         private string _fixUrl = "";
         private bool _isAnalyzing = false;
-        private bool _isSaveListFile = false;
+        private bool _isKeepM3U8ContentSrcUrl = true;
         private bool _isSkipExistFile = false;
         private string _m3U8Content = "";
         private string _savePath = "";
@@ -53,6 +53,8 @@ namespace M3U8Downloader.ViewModels
             CommandDownload = new WpfCommand(OnDownload, CanDownload);
             CommandAbortDownload = new WpfCommand(OnAbortDownload, CanAbortDownload);
             CommandCombine = new WpfCommand(OnCommbine, CanCombine);
+
+            CommandRefreshM3U8Content = new WpfCommand(OnRefreshM3U8Content, CanRefreshM3U8Content);
         }
 
         #endregion Constructors
@@ -68,6 +70,8 @@ namespace M3U8Downloader.ViewModels
         public ICommand CommandCombine { get; private set; }
 
         public ICommand CommandDownload { get; private set; }
+
+        public WpfCommand CommandRefreshM3U8Content { get; private set; }
 
         public ICommand CommandViewPath { get; private set; }
 
@@ -89,13 +93,13 @@ namespace M3U8Downloader.ViewModels
             set => SetProperty(ref _fixUrl, value);
         }
 
-        public bool IsLocalFile => File.Exists(CurrUrl);
-
-        public bool IsSaveListFile
+        public bool IsKeepM3U8ContentSrcUrl
         {
-            get => _isSaveListFile;
-            set => SetProperty(ref _isSaveListFile, value);
+            get => _isKeepM3U8ContentSrcUrl;
+            set => SetProperty(ref _isKeepM3U8ContentSrcUrl, value);
         }
+
+        public bool IsLocalFile => File.Exists(CurrUrl);
 
         public bool IsSkipExistFile
         {
@@ -124,10 +128,6 @@ namespace M3U8Downloader.ViewModels
             {
                 if (SetProperty(ref _selectedM3U8, value))
                 {
-                    if (value != null)
-                    {
-                        M3U8Content = M3U8Helper.GetM3U8Content(_selectedM3U8.SourceTarget, true);
-                    }
                     StateText = "";
                     RaisePropertyChanged(nameof(CanEdit));
                 }
@@ -181,6 +181,11 @@ namespace M3U8Downloader.ViewModels
         private bool CanDownload()
         {
             return SelectedM3U8 != null && !SelectedM3U8.IsDownloading;
+        }
+
+        private bool CanRefreshM3U8Content()
+        {
+            return true;
         }
 
         private bool CanViewPath(string path)
@@ -279,13 +284,6 @@ namespace M3U8Downloader.ViewModels
             var path = model.SavePath;
             Directory.CreateDirectory(path);
             var target = model.SourceTarget;
-            if (IsSaveListFile)
-            {
-                var srcfile = Path.Combine(path, Path.GetFileNameWithoutExtension(target.Name) + "_source.m3u8");
-                var localfile = Path.Combine(path, Path.GetFileNameWithoutExtension(target.Name) + "_local.m3u8");
-                M3U8Helper.SaveToFile(target, srcfile);
-                M3U8Helper.SaveToFile(target, localfile, false);
-            }
             var token = new CancellationTokenSource();
             _canceltokenDic[model] = token;
             model.IsDownloading = true;
@@ -330,6 +328,14 @@ namespace M3U8Downloader.ViewModels
             {
                 SelectedNode = SelectedM3U8.Segments[e.LastIndex];
                 StateText = $"Download {e.M3U8File.Name} {e.LastIndex + 1}/{e.M3U8File.Segments.Length} InProgress:{e.IsInProgress}, IsComplete:{e.IsComplete}, IsCancelled:{e.IsCancelled}.";
+            }
+        }
+
+        private void OnRefreshM3U8Content()
+        {
+            if (SelectedM3U8 != null)
+            {
+                M3U8Content = M3U8Helper.GetM3U8Content(SelectedM3U8.SourceTarget, IsKeepM3U8ContentSrcUrl);
             }
         }
 

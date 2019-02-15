@@ -164,11 +164,6 @@
                                               VerticalContentAlignment="Center"
                                               Content="Skip Exist File"
                                               IsChecked="{Binding Path=IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <CheckBox Margin="25,0,5,0"
-                                              VerticalAlignment="Center"
-                                              VerticalContentAlignment="Center"
-                                              Content="Save List File"
-                                              IsChecked="{Binding Path=IsSaveListFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Width="75"
                                             Height="30"
                                             Margin="25,0,5,0"
@@ -282,11 +277,23 @@
                     </TabItem>
                     <TabItem Header="Content">
                         <Grid VerticalAlignment="Stretch">
-                            <TextBox Height="Auto"
-                                     Margin="0,30,0,0"
-                                     VerticalAlignment="Stretch"
-                                     IsReadOnly="True"
-                                     Text="{Binding M3U8Content}" />
+                            <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
+                                <CheckBox Margin="0,0,10,0"
+                                          VerticalAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          Content="KeepSrcUrl"
+                                          IsChecked="{Binding Path=IsKeepM3U8ContentSrcUrl, Mode=TwoWay}" />
+                                <Button VerticalAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Command="{Binding CommandRefreshM3U8Content}"
+                                        Content="Refresh" />
+                            </StackPanel>
+                            <ScrollViewer Margin="0,35,0,0">
+                                <TextBox Height="Auto"
+                                         VerticalAlignment="Stretch"
+                                         IsReadOnly="True"
+                                         Text="{Binding M3U8Content}" />
+                            </ScrollViewer>
                         </Grid>
                     </TabItem>
                 </TabControl>
