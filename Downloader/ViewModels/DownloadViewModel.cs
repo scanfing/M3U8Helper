@@ -25,8 +25,9 @@ namespace M3U8Downloader.ViewModels
         private DownloadHelper _downloader;
         private string _fixUrl = "";
         private bool _isAnalyzing = false;
+
         private bool _isKeepM3U8ContentSrcUrl = true;
-        private bool _isSkipExistFile = false;
+
         private string _m3U8Content = "";
         private SaveFileDialog _saveFileDialog;
         private string _savePath = "";
@@ -43,7 +44,7 @@ namespace M3U8Downloader.ViewModels
 
         public DownloadViewModel()
         {
-            SavePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Download\\");
+            SavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "M3U8\\");
             M3U8Source = new ObservableCollection<M3U8FileModel>();
             _canceltokenDic = new Dictionary<M3U8FileModel, CancellationTokenSource>();
 
@@ -54,7 +55,7 @@ namespace M3U8Downloader.ViewModels
             CommandViewPath = new WpfCommand<string>(OnViewPath, CanViewPath);
             CommandDownload = new WpfCommand(OnDownload, CanDownload);
             CommandAbortDownload = new WpfCommand(OnAbortDownload, CanAbortDownload);
-            CommandCombine = new WpfCommand(OnCommbine, CanCombine);
+            CommandCombine = new WpfCommand(OnCombine, CanCombine);
 
             CommandRefreshM3U8Content = new WpfCommand(OnRefreshM3U8Content, CanRefreshM3U8Content);
             CommandSaveM3U8ContentToFile = new WpfCommand(OnSaveContentToFile, CanSaveContentToFile);
@@ -105,12 +106,6 @@ namespace M3U8Downloader.ViewModels
         }
 
         public bool IsLocalFile => File.Exists(CurrUrl);
-
-        public bool IsSkipExistFile
-        {
-            get => _isSkipExistFile;
-            set => SetProperty(ref _isSkipExistFile, value);
-        }
 
         public string M3U8Content
         {
@@ -262,6 +257,28 @@ namespace M3U8Downloader.ViewModels
             _isAnalyzing = false;
         }
 
+        private void OnCombine()
+        {
+            var model = SelectedM3U8;
+            OnCombineM3U8Segments(model);
+        }
+
+        private async void OnCombineM3U8Segments(M3U8FileModel model)
+        {
+            var rt = await M3U8Helper.CombineM3U8Segments(model.SourceTarget, model.SavePath, model.CombinedFile, OnCombineProgressChanged, model.IgnoreCombineError);
+            var msg = $"Combine: {rt.IsComplete}";
+            StateText = $"{model.SavePath} Combine: {rt.IsComplete}";
+            if (rt.IsComplete)
+            {
+                msg = $"{DateTime.Now} Combine Complete!";
+            }
+            else
+            {
+                msg = $"{DateTime.Now} Combine Error, Ex:{rt.Exception?.Message}";
+            }
+            model.StateText = msg;
+        }
+
         private void OnCombineProgressChanged(M3U8SegmentsCombineProgressChangedEventArgs e)
         {
             var model = M3U8Source.FirstOrDefault(p => p.SourceTarget == e.M3U8File);
@@ -269,24 +286,6 @@ namespace M3U8Downloader.ViewModels
             model.StateText = msg;
             if (model == SelectedM3U8)
                 StateText = $"{SelectedM3U8.SavePath} Combine : {e.CurrIndex} / {e.M3U8File.Segments.Length} ";
-        }
-
-        private async void OnCommbine()
-        {
-            var model = SelectedM3U8;
-            var rt = await M3U8Helper.CombineM3U8Segments(model.SourceTarget, model.SavePath, model.CombinedFile, OnCombineProgressChanged, model.IgnoreCombineError);
-            var msg = $"Combine: {rt.IsComplete}";
-            if (rt.IsComplete)
-            {
-                msg = $"{DateTime.Now} Commbine Complete!";
-            }
-            else
-            {
-                msg = $"{DateTime.Now} Commbine Error, Ex:{rt.Exception?.Message}";
-            }
-            model.StateText = msg;
-
-            StateText = $"{model.SavePath} Combine: {rt.IsComplete}";
         }
 
         private async void OnDownload()
@@ -298,7 +297,7 @@ namespace M3U8Downloader.ViewModels
             var token = new CancellationTokenSource();
             _canceltokenDic[model] = token;
             model.IsDownloading = true;
-            var rt = await _downloader.DownloadM3U8VideoFilesAsync(target, path, token.Token, IsSkipExistFile);
+            var rt = await _downloader.DownloadM3U8VideoFilesAsync(target, model.SavePath, token.Token, model.IsSkipExistFile);
             if (rt.IsComplete)
             {
                 model.StateText = $"{DateTime.Now} Download Complete!";
@@ -322,6 +321,11 @@ namespace M3U8Downloader.ViewModels
                 if (!e.IsInProgress)
                 {
                     model.IsDownloading = false;
+                    if (e.IsComplete && model.IsCombineAfterDownload)
+                    {
+                        SelectedM3U8.CombinedFile = SelectedM3U8.SavePath + ".ts";
+                        OnCombineM3U8Segments(model);
+                    }
                 }
             }));
             if (e.LastIndex == -1)

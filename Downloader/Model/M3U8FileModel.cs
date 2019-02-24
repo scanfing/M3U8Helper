@@ -13,7 +13,9 @@ namespace M3U8Downloader.Model
         private string _combinedfile = "";
         private string _displayName = "";
         private bool _ignoreCombineError = false;
+        private bool _isCombineAfterDownload = true;
         private bool _isDownloading = false;
+        private bool _isSkipExistFile = false;
         private string _savepath = "";
         private string _stateText = "";
 
@@ -59,10 +61,22 @@ namespace M3U8Downloader.Model
             set => SetProperty(ref _ignoreCombineError, value);
         }
 
+        public bool IsCombineAfterDownload
+        {
+            get => _isCombineAfterDownload;
+            set => SetProperty(ref _isCombineAfterDownload, value);
+        }
+
         public bool IsDownloading
         {
             get => _isDownloading;
             set => SetProperty(ref _isDownloading, value);
+        }
+
+        public bool IsSkipExistFile
+        {
+            get => _isSkipExistFile;
+            set => SetProperty(ref _isSkipExistFile, value);
         }
 
         public string SavePath

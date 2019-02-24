@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:M3U8Downloader.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="M3U8 Downloader"
+        Title="{DynamicResource String_M3U8DownloaderText}"
         Width="800"
         Height="550"
         MinHeight="526"
@@ -27,11 +27,11 @@
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <TextBlock VerticalAlignment="Center" Text="Source:" />
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource String_LblSourceText}" />
             <TextBlock Grid.Row="1"
                        VerticalAlignment="Center"
                        IsEnabled="{Binding Path=IsLocalFile}"
-                       Text="Fix Url:" />
+                       Text="{DynamicResource String_LblFixUrlText}" />
             <TextBox x:Name="Txt_Url"
                      Margin="65,5,80,5"
                      VerticalAlignment="Center"
@@ -46,13 +46,14 @@
                      Text="{Binding Path=FixUrl}" />
             <Button x:Name="Btn_Download"
                     Grid.RowSpan="2"
+                    Width="60"
                     Margin="4,4"
                     HorizontalAlignment="Right"
                     Background="White"
                     BorderBrush="Gray"
                     BorderThickness="1"
                     Command="{Binding CommandAnalyze}"
-                    Content="Analyze" />
+                    Content="{DynamicResource String_BtnAnalyzeText}" />
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -73,7 +74,7 @@
             </ListBox>
             <Grid Grid.Column="1" IsEnabled="{Binding CanEdit}">
                 <TabControl>
-                    <TabItem Header="Header">
+                    <TabItem Header="{DynamicResource String_Head}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*" />
@@ -92,17 +93,17 @@
                                         <CheckBox x:Name="CKB_IsEncrypt"
                                                   VerticalAlignment="Center"
                                                   VerticalContentAlignment="Center"
-                                                  Content="IsEncrypt"
+                                                  Content="{DynamicResource String_CkbIsEncryptText}"
                                                   IsChecked="{Binding Path=IsEncrypt}" />
                                         <Label Grid.Column="1"
                                                Margin="20,0,0,0"
-                                               Content="EncryptMethod:" />
+                                               Content="{DynamicResource String_LblEncryptMethodText}" />
                                         <TextBox Grid.Column="2"
                                                  MinWidth="80"
                                                  Text="{Binding Path=EncryptMethod}" />
                                         <Label Grid.Column="3"
                                                Margin="25,0,0,0"
-                                               Content="TargetDuration:" />
+                                               Content="{DynamicResource String_LblTargetDurationText}" />
                                         <TextBox Grid.Column="4"
                                                  HorizontalAlignment="Stretch"
                                                  Text="{Binding Path=TARGETDURATION}" />
@@ -119,19 +120,19 @@
                                                 <RowDefinition Height="34" />
                                                 <RowDefinition Height="34" />
                                             </Grid.RowDefinitions>
-                                            <Label Content="KeyUrl:" />
+                                            <Label Content="{DynamicResource String_LblKeyUrlText}" />
                                             <TextBox Grid.Column="1"
                                                      Grid.ColumnSpan="3"
                                                      HorizontalAlignment="Stretch"
                                                      Text="{Binding Path=KeyUrl}" />
-                                            <Label Grid.Row="1" Content="Key:" />
+                                            <Label Grid.Row="1" Content="{DynamicResource String_LblKeyValueText}" />
                                             <TextBox Grid.Row="1"
                                                      Grid.Column="1"
                                                      Text="{Binding Path=Key, Converter={StaticResource bytecvt}}" />
                                             <Label Grid.Row="1"
                                                    Grid.Column="2"
                                                    HorizontalAlignment="Right"
-                                                   Content="IV:" />
+                                                   Content="{DynamicResource String_LblIVText}" />
                                             <TextBox Grid.Row="1"
                                                      Grid.Column="3"
                                                      Text="{Binding Path=IV}" />
@@ -144,14 +145,14 @@
                                     </Grid.RowDefinitions>
                                     <CheckBox VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
-                                              Content="HasMap" />
+                                              Content="{DynamicResource String_CkbHasMapText}" />
                                     <TextBox Margin="100,0,0,0"
                                              IsEnabled="{Binding Path=HasMap}"
                                              IsReadOnly="True"
                                              Text="{Binding Path=MapUrl}" />
                                 </Grid>
                                 <Grid Height="30" Margin="0,5">
-                                    <Label Content="Save Path:" />
+                                    <Label Content="{DynamicResource String_LblSavePathText}" />
                                     <TextBox x:Name="TXT_SavePath"
                                              Margin="100,0,120,0"
                                              Padding="0,0,0,0"
@@ -168,7 +169,7 @@
                                             Background="Transparent"
                                             Command="{Binding CommandViewPath}"
                                             CommandParameter="{Binding ElementName=TXT_SavePath, Path=Text}"
-                                            Content="Open" />
+                                            Content="{DynamicResource String_BtnOpenText}" />
                                 </Grid>
                                 <WrapPanel MinHeight="30">
                                     <Button Width="75"
@@ -178,12 +179,17 @@
                                             BorderBrush="Gray"
                                             BorderThickness="1"
                                             Command="{Binding CommandDownload}"
-                                            Content="Download" />
+                                            Content="{DynamicResource String_BtnDownloadText}" />
                                     <CheckBox Margin="25,0,5,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
-                                              Content="Skip Exist File"
-                                              IsChecked="{Binding Path=IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                              Content="{DynamicResource String_CkbSkipExistFileText}"
+                                              IsChecked="{Binding Path=SelectedM3U8.IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <CheckBox Margin="25,0,5,0"
+                                              VerticalAlignment="Center"
+                                              VerticalContentAlignment="Center"
+                                              Content="{DynamicResource String_CombineAfterDownload}"
+                                              IsChecked="{Binding Path=SelectedM3U8.IsCombineAfterDownload, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Width="75"
                                             Height="30"
                                             Margin="25,0,5,0"
@@ -192,14 +198,14 @@
                                             BorderBrush="Gray"
                                             BorderThickness="1"
                                             Command="{Binding CommandAbortDownload}"
-                                            Content="Abort" />
+                                            Content="{DynamicResource String_BtnAbortText}" />
                                 </WrapPanel>
                                 <Grid Margin="0,5">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="30" />
                                         <RowDefinition Height="40" />
                                     </Grid.RowDefinitions>
-                                    <Label Content="Output Path:" />
+                                    <Label Content="{DynamicResource String_LblOutputPathText}" />
                                     <TextBox x:Name="TXT_CombineFile"
                                              Margin="100,0,125,0"
                                              VerticalContentAlignment="Center"
@@ -215,12 +221,12 @@
                                             Background="Transparent"
                                             Command="{Binding CommandViewPath}"
                                             CommandParameter="{Binding ElementName=TXT_CombineFile, Path=Text}"
-                                            Content="Open" />
+                                            Content="{DynamicResource String_BtnOpenText}" />
                                     <CheckBox Grid.Row="1"
                                               Margin="100,0,0,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
-                                              Content="Ignore Combine Error"
+                                              Content="{DynamicResource String_CkbIgnoreCombineErrorText}"
                                               IsChecked="{Binding Path=SelectedM3U8.IgnoreCombineError, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <Button Grid.Row="1"
                                             Width="75"
@@ -229,7 +235,7 @@
                                             VerticalAlignment="Center"
                                             Background="Transparent"
                                             Command="{Binding CommandCombine}"
-                                            Content="Combine" />
+                                            Content="{DynamicResource String_BtnCombineText}" />
                                 </Grid>
                             </StackPanel>
                             <TextBox Grid.Row="1"
@@ -240,7 +246,7 @@
                                      Text="{Binding SelectedM3U8.StateText}" />
                         </Grid>
                     </TabItem>
-                    <TabItem VerticalAlignment="Stretch" Header="Segments">
+                    <TabItem VerticalAlignment="Stretch" Header="{DynamicResource String_Segments}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*" />
@@ -258,14 +264,14 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="Auto"
                                                         Binding="{Binding SegmentName}"
-                                                        Header="Segment" />
+                                                        Header="{DynamicResource String_Header_Segments}" />
                                     <DataGridTextColumn Width="Auto"
                                                         Binding="{Binding Seconds}"
-                                                        Header="Duration" />
+                                                        Header="{DynamicResource String_Header_Duration}" />
                                     <DataGridCheckBoxColumn Width="Auto"
                                                             Binding="{Binding IsEncrypt}"
-                                                            Header="IsEncrypt" />
-                                    <DataGridTemplateColumn Width="1*" Header="Target">
+                                                            Header="{DynamicResource String_Header_IsEncrypt}" />
+                                    <DataGridTemplateColumn Width="1*" Header="{DynamicResource String_Header_Target}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock VerticalAlignment="Center" Text="{Binding Path=Target}" />
@@ -301,23 +307,23 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Content">
+                    <TabItem Header="{DynamicResource String_Content}">
                         <Grid VerticalAlignment="Stretch">
                             <StackPanel VerticalAlignment="Top" Orientation="Horizontal">
                                 <CheckBox Margin="0,0,10,0"
                                           VerticalAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Content="KeepSrcUrl"
+                                          Content="{DynamicResource String_CheckBox_KeepSrcUrl}"
                                           IsChecked="{Binding Path=IsKeepM3U8ContentSrcUrl, Mode=TwoWay}" />
                                 <Button Margin="20,0"
                                         VerticalAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Command="{Binding CommandRefreshM3U8Content}"
-                                        Content="Generate" />
+                                        Content="{DynamicResource String_Button_Generate}" />
                                 <Button VerticalAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Command="{Binding CommandSaveM3U8ContentToFile}"
-                                        Content="Save" />
+                                        Content="{DynamicResource String_Button_SaveAs}" />
                             </StackPanel>
                             <ScrollViewer Margin="0,35,0,0">
                                 <TextBox Height="Auto"
