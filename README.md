@@ -1,7 +1,7 @@
 # M3U8Helper
 m3u8文件解析助手
 
-M3U8Helper (核心功能实现)::
+M3U8Helper (核心功能实现)
 
     •解析网络地址和本地地址的m3u8文件
 
