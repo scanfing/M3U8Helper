@@ -84,70 +84,68 @@
                                 <StackPanel Margin="0,4" DataContext="{Binding Path=SelectedM3U8.Head}">
                                     <Grid Height="34">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="100" />
                                             <ColumnDefinition Width="1*" />
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="1*" />
                                         </Grid.ColumnDefinitions>
-                                        <CheckBox x:Name="CKB_IsEncrypt"
-                                                  VerticalAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Content="{DynamicResource String_CkbIsEncryptText}"
-                                                  IsChecked="{Binding Path=IsEncrypt}" />
-                                        <Label Grid.Column="1"
-                                               Margin="20,0,0,0"
+                                        <Label x:Name="CKB_IsEncrypt"
+                                               VerticalAlignment="Center"
+                                               VerticalContentAlignment="Center"
                                                Content="{DynamicResource String_LblEncryptMethodText}"
-                                               IsEnabled="{Binding ElementName=CKB_IsEncrypt, Path=IsChecked}" />
-                                        <TextBox Grid.Column="2"
-                                                 MinWidth="80"
-                                                 IsEnabled="{Binding ElementName=CKB_IsEncrypt, Path=IsChecked}"
+                                               IsEnabled="{Binding Path=IsEncrypt}" />
+                                        <TextBox Grid.Column="1"
+                                                 IsEnabled="{Binding Path=IsEncrypt}"
+                                                 IsReadOnly="True"
                                                  Text="{Binding Path=EncryptMethod}" />
-                                        <Label Grid.Column="3"
+                                        <Label Grid.Column="2"
                                                Margin="25,0,0,0"
                                                Content="{DynamicResource String_LblTargetDurationText}" />
-                                        <TextBox Grid.Column="4"
+                                        <TextBox Grid.Column="3"
                                                  HorizontalAlignment="Stretch"
+                                                 IsReadOnly="True"
                                                  Text="{Binding Path=TARGETDURATION}" />
                                     </Grid>
-                                    <StackPanel>
-                                        <Grid IsEnabled="{Binding ElementName=CKB_IsEncrypt, Path=IsChecked}">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="100" />
-                                                <ColumnDefinition Width="1*" />
-                                                <ColumnDefinition Width="100" />
-                                                <ColumnDefinition Width="1*" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="34" />
-                                                <RowDefinition Height="34" />
-                                            </Grid.RowDefinitions>
-                                            <Label Content="{DynamicResource String_LblKeyUrlText}" />
-                                            <TextBox Grid.Column="1"
-                                                     Grid.ColumnSpan="3"
-                                                     HorizontalAlignment="Stretch"
-                                                     Text="{Binding Path=KeyUrl}" />
-                                            <Label Grid.Row="1" Content="{DynamicResource String_LblKeyValueText}" />
-                                            <TextBox Grid.Row="1"
-                                                     Grid.Column="1"
-                                                     Text="{Binding Path=Key, Converter={StaticResource bytecvt}}" />
-                                            <Label Grid.Row="1"
-                                                   Grid.Column="2"
-                                                   HorizontalAlignment="Right"
-                                                   Content="{DynamicResource String_LblIVText}" />
-                                            <TextBox Grid.Row="1"
-                                                     Grid.Column="3"
-                                                     Text="{Binding Path=IV}" />
-                                        </Grid>
-                                    </StackPanel>
+                                    <Grid IsEnabled="{Binding Path=IsEncrypt}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="1*" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="1*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="34" />
+                                            <RowDefinition Height="34" />
+                                        </Grid.RowDefinitions>
+                                        <Label Content="{DynamicResource String_LblKeyUrlText}" />
+                                        <TextBox Grid.Column="1"
+                                                 Grid.ColumnSpan="3"
+                                                 HorizontalAlignment="Stretch"
+                                                 IsReadOnly="True"
+                                                 Text="{Binding Path=KeyUrl}" />
+                                        <Label Grid.Row="1" Content="{DynamicResource String_LblKeyValueText}" />
+                                        <TextBox Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 IsReadOnly="True"
+                                                 Text="{Binding Path=Key, Converter={StaticResource bytecvt}}" />
+                                        <Label Grid.Row="1"
+                                               Grid.Column="2"
+                                               HorizontalAlignment="Right"
+                                               Content="{DynamicResource String_LblIVText}" />
+                                        <TextBox Grid.Row="1"
+                                                 Grid.Column="3"
+                                                 IsReadOnly="True"
+                                                 Text="{Binding Path=IV}" />
+                                    </Grid>
                                 </StackPanel>
                                 <Grid Margin="0,5" DataContext="{Binding Path=SelectedM3U8.Head}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="34" />
                                     </Grid.RowDefinitions>
-                                    <CheckBox VerticalAlignment="Center"
-                                              VerticalContentAlignment="Center"
-                                              Content="{DynamicResource String_CkbHasMapText}" />
+                                    <Label VerticalAlignment="Center"
+                                           VerticalContentAlignment="Center"
+                                           Content="{DynamicResource String_CkbHasMapText}"
+                                           IsEnabled="{Binding Path=HasMap}" />
                                     <TextBox Margin="100,0,0,0"
                                              IsEnabled="{Binding Path=HasMap}"
                                              IsReadOnly="True"
@@ -187,7 +185,7 @@
                                               VerticalContentAlignment="Center"
                                               Content="{DynamicResource String_CkbSkipExistFileText}"
                                               IsChecked="{Binding Path=SelectedM3U8.IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <CheckBox Margin="25,0,5,0"
+                                    <CheckBox Margin="25,0,40,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
                                               Content="{DynamicResource String_CombineAfterDownload}"

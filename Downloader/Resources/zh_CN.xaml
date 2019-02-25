@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:M3U8Downloader.Theme"
+                    xmlns:local="clr-namespace:M3U8Downloader.Resources"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     <s:String x:Key="String_M3U8DownloaderText">M3U8视频片段下载器</s:String>
 
@@ -12,7 +12,6 @@
     <s:String x:Key="String_LblFixUrlText">修正地址:</s:String>
     <s:String x:Key="String_BtnAnalyzeText">解析</s:String>
 
-    <s:String x:Key="String_CkbIsEncryptText">是否加密</s:String>
     <s:String x:Key="String_LblEncryptMethodText">加密方法:</s:String>
     <s:String x:Key="String_LblTargetDurationText">最大片段:</s:String>
 
@@ -20,7 +19,7 @@
     <s:String x:Key="String_LblKeyValueText">Key值:</s:String>
     <s:String x:Key="String_LblIVText">IV:</s:String>
 
-    <s:String x:Key="String_CkbHasMapText">MapUri:</s:String>
+    <s:String x:Key="String_CkbHasMapText">Map地址:</s:String>
 
     <s:String x:Key="String_LblSavePathText">片段保存路径:</s:String>
     <s:String x:Key="String_BtnOpenText">查看</s:String>
