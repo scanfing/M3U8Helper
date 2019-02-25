@@ -97,9 +97,11 @@
                                                   IsChecked="{Binding Path=IsEncrypt}" />
                                         <Label Grid.Column="1"
                                                Margin="20,0,0,0"
-                                               Content="{DynamicResource String_LblEncryptMethodText}" />
+                                               Content="{DynamicResource String_LblEncryptMethodText}"
+                                               IsEnabled="{Binding ElementName=CKB_IsEncrypt, Path=IsChecked}" />
                                         <TextBox Grid.Column="2"
                                                  MinWidth="80"
+                                                 IsEnabled="{Binding ElementName=CKB_IsEncrypt, Path=IsChecked}"
                                                  Text="{Binding Path=EncryptMethod}" />
                                         <Label Grid.Column="3"
                                                Margin="25,0,0,0"

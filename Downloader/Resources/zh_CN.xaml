@@ -20,7 +20,7 @@
     <s:String x:Key="String_LblKeyValueText">Key值:</s:String>
     <s:String x:Key="String_LblIVText">IV:</s:String>
 
-    <s:String x:Key="String_CkbHasMapText">独立片头:</s:String>
+    <s:String x:Key="String_CkbHasMapText">MapUri:</s:String>
 
     <s:String x:Key="String_LblSavePathText">片段保存路径:</s:String>
     <s:String x:Key="String_BtnOpenText">查看</s:String>
