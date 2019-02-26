@@ -79,9 +79,10 @@ namespace AuxiliaryTools.M3U8
             }
         }
 
-        public static async Task DownloadM3U8SegmentsAsParallel(IEnumerable<M3U8Segment> segments, string savedir, bool skipexistfile = true, Action<M3U8Segment, int> downloadaction = null)
+        public static async Task DownloadM3U8SegmentsAsParallel(IEnumerable<M3U8Segment> segments, string savedir, CancellationToken token, bool skipexistfile = true, Action<M3U8Segment, int> downloadaction = null)
         {
-            var concurrentBag = new ConcurrentBag<M3U8Segment>(segments);
+            var lst = segments.Reverse();
+            var concurrentBag = new ConcurrentBag<M3U8Segment>(lst);
             var getitemaction = new Func<M3U8Segment>(() =>
              {
                  if (concurrentBag.TryTake(out var item))
@@ -99,7 +100,7 @@ namespace AuxiliaryTools.M3U8
                     var curindex = Interlocked.Increment(ref index);
                     var percent = curindex * 100 / total;
                     downloadaction?.Invoke(node, percent);
-                });
+                }, token);
                 tlst.Add(t);
                 await Task.Delay(10);
             }
@@ -151,7 +152,7 @@ namespace AuxiliaryTools.M3U8
                  };
                  RaiseSegmentDownloaded(e);
              });
-            await DownloadM3U8SegmentsAsParallel(mfile.Segments, savedir, skipexistfile, downloadaction);
+            await DownloadM3U8SegmentsAsParallel(mfile.Segments, savedir, token, skipexistfile, downloadaction);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace AuxiliaryTools.M3U8
                     throw new OperationCanceledException("下载被取消");
                 token.ThrowIfCancellationRequested();
             });
-            var segresult = await DownloadM3U8VideoSegments(target.Segments, savedir, 0, -1, skipexistsegment, action);
+            var segresult = await DownloadM3U8VideoSegments(target.Segments, savedir, skipexistsegment, action);
             var endargs = new M3U8DownloadProgressChangedEventArgs(target)
             {
                 IsInProgress = false,
@@ -204,17 +205,13 @@ namespace AuxiliaryTools.M3U8
             return segresult;
         }
 
-        public async Task<M3U8DownloadResult> DownloadM3U8VideoSegments(M3U8Segment[] nodes, string savedir, int offset = 0, int length = -1, bool skipexistfile = false, Action<M3U8Segment> progresschangedaction = null)
+        public async Task<M3U8DownloadResult> DownloadM3U8VideoSegments(M3U8Segment[] nodes, string savedir, bool skipexistfile = false, Action<M3U8Segment> progresschangedaction = null)
         {
             using (var client = new WebClient())
             {
                 var result = new M3U8DownloadResult();
                 var endvalue = nodes.Length;
-                if (length >= 0)
-                {
-                    endvalue = Math.Min(endvalue, offset + length);
-                }
-                for (var index = offset; index < endvalue; index++)
+                for (var index = 0; index < endvalue; index++)
                 {
                     try
                     {
