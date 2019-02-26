@@ -183,6 +183,11 @@
                                     <CheckBox Margin="25,0,5,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
+                                              Content="{DynamicResource String_CkbDownloadInSequenceText}"
+                                              IsChecked="{Binding Path=SelectedM3U8.DownloadInSequence, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <CheckBox Margin="25,0,5,0"
+                                              VerticalAlignment="Center"
+                                              VerticalContentAlignment="Center"
                                               Content="{DynamicResource String_CkbSkipExistFileText}"
                                               IsChecked="{Binding Path=SelectedM3U8.IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <CheckBox Margin="25,0,40,0"

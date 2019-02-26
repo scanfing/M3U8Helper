@@ -12,6 +12,7 @@ namespace M3U8Downloader.Model
         public readonly M3U8File SourceTarget;
         private string _combinedfile = "";
         private string _displayName = "";
+        private bool _downloadInSequence = false;
         private bool _ignoreCombineError = false;
         private bool _isCombineAfterDownload = true;
         private bool _isDownloading = false;
@@ -51,6 +52,12 @@ namespace M3U8Downloader.Model
                 return _displayName;
             }
             set => SetProperty(ref _displayName, value);
+        }
+
+        public bool DownloadInSequence
+        {
+            get => _downloadInSequence;
+            set => SetProperty(ref _downloadInSequence, value);
         }
 
         public M3U8Head Head { get; private set; }

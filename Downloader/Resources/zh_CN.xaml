@@ -24,6 +24,7 @@
     <s:String x:Key="String_LblSavePathText">片段保存路径:</s:String>
     <s:String x:Key="String_BtnOpenText">查看</s:String>
     <s:String x:Key="String_BtnDownloadText">下载</s:String>
+    <s:String x:Key="String_CkbDownloadInSequenceText">依次下载</s:String>
     <s:String x:Key="String_CkbSkipExistFileText">跳过已存在的文件</s:String>
     <s:String x:Key="String_CombineAfterDownload">下载完成后自动合并</s:String>
     <s:String x:Key="String_BtnAbortText">终止</s:String>

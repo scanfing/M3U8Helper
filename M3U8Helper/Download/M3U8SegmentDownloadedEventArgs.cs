@@ -2,12 +2,13 @@
 
 namespace AuxiliaryTools.M3U8
 {
-    public class M3U8DownloadProgressChangedEventArgs : EventArgs
+    public class M3U8SegmentDownloadedEventArgs : EventArgs
     {
         #region Constructors
 
-        public M3U8DownloadProgressChangedEventArgs(M3U8File file)
+        public M3U8SegmentDownloadedEventArgs(M3U8Segment node, M3U8File file)
         {
+            Segment = node;
             M3U8File = file;
         }
 
@@ -15,12 +16,19 @@ namespace AuxiliaryTools.M3U8
 
         #region Properties
 
-        public bool CancelDownload { get; set; } = false;
+        public int DownloadedCount { get; set; }
+
         public bool IsCancelled { get; set; }
+
         public bool IsComplete { get; set; }
+
         public bool IsInProgress { get; set; }
-        public int LastIndex { get; set; }
+
         public M3U8File M3U8File { get; set; }
+
+        public M3U8Segment Segment { get; }
+
+        public int TotalCount { get; set; }
 
         #endregion Properties
     }

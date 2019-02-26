@@ -53,10 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\M3U8Head.cs" />
-    <Compile Include="Download\M3U8DownloadProgressChangedEventArgs.cs" />
+    <Compile Include="Download\M3U8SegmentDownloadedEventArgs.cs" />
     <Compile Include="Download\DownloadHelper.cs" />
     <Compile Include="Download\M3U8DownloadResult.cs" />
-    <Compile Include="Download\SegmentDownloadEventArgs.cs" />
+    <Compile Include="Download\M3U8VideoDownloadProgressChangedArgs.cs" />
     <Compile Include="M3U8FileAnalyzer.cs" />
     <Compile Include="M3U8Helper.cs" />
     <Compile Include="Core\M3U8File.cs" />

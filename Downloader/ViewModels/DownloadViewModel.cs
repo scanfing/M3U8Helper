@@ -49,8 +49,7 @@ namespace M3U8Downloader.ViewModels
             _canceltokenDic = new Dictionary<M3U8FileModel, CancellationTokenSource>();
 
             _downloader = new DownloadHelper();
-            _downloader.DownloadProgressChanged += OnDownloadProgressChanged;
-            _downloader.SegmentDownloaded += OnSegmentDownloaded;
+            _downloader.ProgressChanged += OnDownloadProgressChanged;
 
             CommandAnalyze = new WpfCommand(OnAnalyze, CanAnalyze);
             CommandViewPath = new WpfCommand<string>(OnViewPath, CanViewPath);
@@ -298,8 +297,12 @@ namespace M3U8Downloader.ViewModels
             var token = new CancellationTokenSource();
             _canceltokenDic[model] = token;
             model.IsDownloading = true;
-            //var rt = await _downloader.DownloadM3U8VideoFilesAsync(target, model.SavePath, token.Token, model.IsSkipExistFile);
-            await _downloader.DownloadM3U8FilesAsParallel(target, model.SavePath, token.Token, model.IsSkipExistFile);
+            M3U8DownloadResult rt;
+            if (model.DownloadInSequence)
+                rt = await _downloader.DownloadM3U8VideoFilesAsync(target, model.SavePath, token.Token, model.IsSkipExistFile);
+            else
+                rt = await _downloader.DownloadM3U8FilesAsParallel(target, model.SavePath, token.Token, model.IsSkipExistFile);
+            model.IsDownloading = false;
             model.StateText = $"{DateTime.Now} Download Complete!";
             StateText = $"{DateTime.Now} {model.DisplayName} Download Complete! [{path}]";
             if (model.IsCombineAfterDownload)
@@ -309,33 +312,14 @@ namespace M3U8Downloader.ViewModels
             }
         }
 
-        private void OnDownloadProgressChanged(object sender, M3U8DownloadProgressChangedEventArgs e)
+        private void OnDownloadProgressChanged(object sender, M3U8VideoDownloadProgressChangedArgs e)
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                var model = M3U8Source.FirstOrDefault(p => p.SourceTarget == e.M3U8File);
-                model.StateText = $"{DateTime.Now} Download {e.LastIndex} / {e.M3U8File.Segments.Length} .";
-                if (!e.IsInProgress)
-                {
-                    model.IsDownloading = false;
-                }
+                var model = M3U8Source.FirstOrDefault(p => p.SourceTarget == e.File);
+                model.StateText = $"{DateTime.Now} Download {e.Node} [{e.IsNodeDownloadSuccess}].";
+                StateText = $"Download {model.DisplayName} {e.Count}/{e.TotalCount} .";
             }));
-            if (e.LastIndex == -1)
-            {
-                if (e.M3U8File == SelectedM3U8.SourceTarget)
-                {
-                    var model = SelectedM3U8;
-                    SelectedM3U8 = null;
-                    SelectedM3U8 = model;
-                }
-                return;
-            }
-
-            if (SelectedM3U8.SourceTarget == e.M3U8File)
-            {
-                SelectedNode = SelectedM3U8.Segments[e.LastIndex];
-                StateText = $"Download {e.M3U8File.Name} {e.LastIndex + 1}/{e.M3U8File.Segments.Length} InProgress:{e.IsInProgress}, IsComplete:{e.IsComplete}, IsCancelled:{e.IsCancelled}.";
-            }
         }
 
         private void OnRefreshM3U8Content()
@@ -371,21 +355,6 @@ namespace M3U8Downloader.ViewModels
                     SelectedM3U8.StateText = $"Save Content Error:{ex.Message}";
                     StateText = $"Save Content Error:{ex.Message}";
                 }
-            }
-        }
-
-        private void OnSegmentDownloaded(object sender, SegmentDownloadEventArgs e)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                var model = M3U8Source.FirstOrDefault(p => p.SourceTarget == e.M3U8File);
-                model.StateText = $"{DateTime.Now} {e.PercentComplete}% Downloaded { e.Segment} .";
-            }));
-
-            if (SelectedM3U8.SourceTarget == e.M3U8File)
-            {
-                SelectedNode = e.Segment;
-                StateText = $"Downloaded {e.PercentComplete}% {e.M3U8File.Name} {e.Segment} .";
             }
         }
 
