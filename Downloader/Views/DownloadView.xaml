@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:M3U8Downloader.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="{DynamicResource String_M3U8DownloaderText}"
-        Width="800"
+        Width="750"
         Height="550"
+        MinWidth="750"
         MinHeight="526"
         FontFamily="Microsoft YaHei"
         FontSize="14"
@@ -61,7 +62,7 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <ListBox Grid.Column="0"
-                     Width="200"
+                     Width="180"
                      ItemsSource="{Binding M3U8Source}"
                      SelectedItem="{Binding SelectedM3U8}">
                 <ListBox.ItemTemplate>
@@ -180,6 +181,15 @@
                                             BorderThickness="1"
                                             Command="{Binding CommandDownload}"
                                             Content="{DynamicResource String_BtnDownloadText}" />
+                                    <Button Width="75"
+                                            Height="30"
+                                            Margin="25,0,5,0"
+                                            HorizontalAlignment="Left"
+                                            Background="Transparent"
+                                            BorderBrush="Gray"
+                                            BorderThickness="1"
+                                            Command="{Binding CommandAbortDownload}"
+                                            Content="{DynamicResource String_BtnAbortText}" />
                                     <CheckBox Margin="25,0,5,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
@@ -190,20 +200,11 @@
                                               VerticalContentAlignment="Center"
                                               Content="{DynamicResource String_CkbSkipExistFileText}"
                                               IsChecked="{Binding Path=SelectedM3U8.IsSkipExistFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <CheckBox Margin="25,0,40,0"
+                                    <CheckBox Margin="0,0,40,0"
                                               VerticalAlignment="Center"
                                               VerticalContentAlignment="Center"
                                               Content="{DynamicResource String_CombineAfterDownload}"
                                               IsChecked="{Binding Path=SelectedM3U8.IsCombineAfterDownload, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Button Width="75"
-                                            Height="30"
-                                            Margin="25,0,5,0"
-                                            HorizontalAlignment="Left"
-                                            Background="Transparent"
-                                            BorderBrush="Gray"
-                                            BorderThickness="1"
-                                            Command="{Binding CommandAbortDownload}"
-                                            Content="{DynamicResource String_BtnAbortText}" />
                                 </WrapPanel>
                                 <Grid Margin="0,5">
                                     <Grid.RowDefinitions>
