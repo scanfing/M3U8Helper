@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("M3U8Downloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("scanfing@foxmail.com")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("M3U8Downloader")]
 [assembly: AssemblyCopyright("Free to use(M3U8Helper Sample)")]
 [assembly: AssemblyTrademark("")]
