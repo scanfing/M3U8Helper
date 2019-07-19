@@ -62,7 +62,7 @@ namespace AuxiliaryTools.M3U8
             if (Size <= 0)
                 return $"{SegmentName}, {Seconds}s";
             else
-                return $"{SegmentName}, {Seconds}s, {Size / 1000}KB";
+                return $"{SegmentName}, {Seconds}s, {Size / 1024}KB";
         }
 
         #endregion Methods
