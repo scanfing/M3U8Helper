@@ -63,6 +63,13 @@
     <Compile Include="Infrastruction\WpfCommand.cs" />
     <Compile Include="Model\M3U8FileModel.cs" />
     <Compile Include="ViewModels\DownloadViewModel.cs" />
+    <Compile Include="ViewModels\ExploreViewModel.cs" />
+    <Compile Include="Views\ExploreView.xaml.cs">
+      <DependentUpon>ExploreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DownloadTasksView.xaml.cs">
+      <DependentUpon>DownloadTasksView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DownloadView.xaml.cs">
       <DependentUpon>DownloadView.xaml</DependentUpon>
     </Compile>
@@ -75,6 +82,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Theme\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExploreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DownloadTasksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
