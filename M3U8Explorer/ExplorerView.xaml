@@ -5,10 +5,11 @@
         xmlns:local="clr-namespace:M3U8Explorer"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-        Title="MainWindow"
-        Width="800"
-        Height="450"
+        Title="M3U8Explorer"
+        Width="960"
+        Height="600"
         Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Window.DataContext>
         <local:ExplorerViewModel />
@@ -17,7 +18,9 @@
         <TabControl ItemsSource="{Binding Browsers}" SelectedItem="{Binding CurrentBrowser}">
             <TabControl.ItemTemplate>
                 <HierarchicalDataTemplate>
-                    <Border MinWidth="120" CornerRadius="3">
+                    <Border MinWidth="120"
+                            Padding="1"
+                            CornerRadius="3">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*" />
@@ -25,6 +28,12 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
                             <Button Grid.Column="1"
+                                    Width="24"
+                                    Height="24"
+                                    Padding="2"
+                                    HorizontalAlignment="Right"
+                                    Background="#01ffffff"
+                                    BorderThickness="0"
                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window, AncestorLevel=1}, Path=DataContext.CloseBorwserPageCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabItem}, AncestorLevel=1}, Path=DataContext}"
                                     Content="X" />
@@ -34,7 +43,63 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <ContentControl Content="{Binding WebView2}" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button Width="24"
+                                        Height="24"
+                                        Margin="2"
+                                        BorderThickness="0"
+                                        Command="{Binding GoBackCommand}"
+                                        Content="&lt;" />
+                                <Button Grid.Column="1"
+                                        Width="24"
+                                        Height="24"
+                                        Margin="2"
+                                        BorderThickness="0"
+                                        Command="{Binding GoForwardCommand}"
+                                        Content="&gt;" />
+                                <Button Grid.Column="2"
+                                        Width="24"
+                                        Height="24"
+                                        Margin="2"
+                                        BorderThickness="0"
+                                        Command="{Binding RefreshCommand}"
+                                        Content="R" />
+                                <TextBox x:Name="Txt_Url"
+                                         Grid.Column="3"
+                                         Height="24"
+                                         Margin="2"
+                                         Padding="2"
+                                         VerticalContentAlignment="Center"
+                                         Text="{Binding WebView2.Source, Mode=OneWay}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Return"
+                                                    Command="{Binding OpenUrlInCurrBrowserCommand}"
+                                                    CommandParameter="{Binding ElementName=Txt_Url, Path=Text}" />
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <Button Grid.Column="4"
+                                        Width="24"
+                                        Height="24"
+                                        Margin="2"
+                                        BorderThickness="0"
+                                        Content="=" />
+                            </Grid>
+                        </Border>
+                        <ContentControl Grid.Row="1" Content="{Binding WebView2}" />
+                    </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

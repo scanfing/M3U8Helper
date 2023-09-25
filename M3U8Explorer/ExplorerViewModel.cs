@@ -1,4 +1,5 @@
-﻿using M3U8Downloader.Infrastruction;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using M3U8Explorer.Web;
 using Microsoft.Web.WebView2.Wpf;
 using System;
@@ -13,7 +14,7 @@ using System.Windows.Threading;
 
 namespace M3U8Explorer
 {
-    public class ExplorerViewModel : NotifyObject
+    public class ExplorerViewModel : ObservableObject
     {
         #region Fields
 
@@ -27,24 +28,24 @@ namespace M3U8Explorer
         {
             Browsers = new ObservableCollection<BrowserWrapperModel>();
 
-            CloseBorwserPageCommand = new WpfCommand<BrowserWrapperModel>(OnRequestClosePage, (e) => true);
+            CloseBorwserPageCommand = new RelayCommand<BrowserWrapperModel>(OnRequestClosePage, (e) => true);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public ICommand CloseBorwserPageCommand { get; private set; }
-
-        public Dispatcher Dispatcher { get; set; }
-
         public ObservableCollection<BrowserWrapperModel> Browsers { get; private set; }
+
+        public ICommand CloseBorwserPageCommand { get; private set; }
 
         public BrowserWrapperModel CurrentBrowser
         {
             get => _currentBrowser;
             set => SetProperty(ref _currentBrowser, value);
         }
+
+        public Dispatcher Dispatcher { get; set; }
 
         #endregion Properties
 
@@ -61,17 +62,17 @@ namespace M3U8Explorer
             return wrapper;
         }
 
+        private void InitBorwser(BrowserWrapperModel webbrowser)
+        {
+            webbrowser.NewWindowRequested += WebView2_NewWindowRequested;
+        }
+
         private void OnRequestClosePage(BrowserWrapperModel webbrowser)
         {
             if (webbrowser is null)
                 return;
 
             Browsers.Remove(webbrowser);
-        }
-
-        private void InitBorwser(BrowserWrapperModel webbrowser)
-        {
-            webbrowser.NewWindowRequested += WebView2_NewWindowRequested;
         }
 
         private void WebView2_NewWindowRequested(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NewWindowRequestedEventArgs e)
