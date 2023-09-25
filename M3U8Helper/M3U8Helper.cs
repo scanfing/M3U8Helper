@@ -123,7 +123,7 @@ namespace AuxiliaryTools.M3U8
                 var mfile = $"{dir}{name}.m3u8";
                 if (File.Exists(mfile))
                 {
-                    mfile = $"{dir}{name}_{ m.RESOLUTION}.m3u8";
+                    mfile = $"{dir}{name}_{m.RESOLUTION}.m3u8";
                 }
                 try
                 {

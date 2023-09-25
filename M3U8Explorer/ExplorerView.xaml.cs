@@ -1,5 +1,4 @@
-﻿using M3U8Downloader.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,39 +10,38 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace M3U8Downloader.Views
+namespace M3U8Explorer
 {
     /// <summary>
-    /// ExploreView.xaml 的交互逻辑
+    /// ExplorerView.xaml 的交互逻辑
     /// </summary>
-    public partial class ExploreView : Window
+    public partial class ExplorerView : Window
     {
         #region Fields
 
-        private ExploreViewModel _viewModel;
+        private ExplorerViewModel viewModel;
 
         #endregion Fields
 
         #region Constructors
 
-        public ExploreView()
+        public ExplorerView()
         {
             InitializeComponent();
-            _viewModel = DataContext as ExploreViewModel;
-            _viewModel.Browser = webBorwser;
-
-            Loaded += ExploreView_Loaded;
+            viewModel = DataContext as ExplorerViewModel;
+            viewModel.Dispatcher = Dispatcher;
         }
 
         #endregion Constructors
 
         #region Methods
 
-        private void ExploreView_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel?.SetupBrowser();
+            viewModel.CreateNewBrowser("http://www.baidu.com");
         }
 
         #endregion Methods
