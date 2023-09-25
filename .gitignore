@@ -6,3 +6,6 @@
 /Bin
 /Downloader/obj
 /M3U8Helper/obj
+/packages
+*/obj
+*/bin
