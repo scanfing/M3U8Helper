@@ -85,6 +85,11 @@ namespace M3U8Explorer.Web
 
         private void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
         {
+            if (e.Uri.Equals("about:blank"))
+            {
+                e.Handled = true;
+                return;
+            }        
             NewWindowRequested?.Invoke(this, e);
         }
 
