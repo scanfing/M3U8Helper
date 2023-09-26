@@ -135,7 +135,12 @@ namespace M3U8Explorer.Web
 
         private void OnRequestOpenUrlInCurrBrowser(string url)
         {
-            WebView2.CoreWebView2.Navigate(url);
+            var dstUrl = url;
+            if (!url.StartsWith("http"))
+            {
+                dstUrl = $"http://{url}";
+            }
+            WebView2.CoreWebView2.Navigate(dstUrl);
         }
 
         private void RefreshButtonState()
