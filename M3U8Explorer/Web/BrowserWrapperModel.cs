@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using M3U8Explorer.Models;
+using M3U8Explorer.Views;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -38,6 +40,7 @@ namespace M3U8Explorer.Web
             GoForwardCommand = new RelayCommand(OnRequestForward, () => WebView2.CanGoForward);
             RefreshCommand = new RelayCommand(OnRequestRefresh, () => WebView2.IsLoaded);
             OpenUrlInCurrBrowserCommand = new RelayCommand<string>(OnRequestOpenUrlInCurrBrowser, (e) => true);
+            OpenResListViewCommand = new RelayCommand<IEnumerable<M3U8ResourceInfo>>(OnRequestOpResList, (e) => true);
         }
 
         #endregion Constructors
@@ -54,6 +57,10 @@ namespace M3U8Explorer.Web
 
         public RelayCommand GoForwardCommand { get; private set; }
 
+        public ObservableCollection<M3U8ResourceInfo> M3U8Resources { get; private set; }
+
+        public RelayCommand<IEnumerable<M3U8ResourceInfo>> OpenResListViewCommand { get; private set; }
+
         public RelayCommand<string> OpenUrlInCurrBrowserCommand { get; private set; }
 
         public RelayCommand RefreshCommand { get; private set; }
@@ -65,8 +72,6 @@ namespace M3U8Explorer.Web
         }
 
         public WebView2 WebView2 => _webView;
-
-        public ObservableCollection<M3U8ResourceInfo> M3U8Resources { get; private set; }
 
         #endregion Properties
 
@@ -84,32 +89,6 @@ namespace M3U8Explorer.Web
             WebView2.Reload();
         }
 
-        private void Webbrowser_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
-        {
-            if (!e.IsSuccess)
-                return;
-
-            WebView2.CoreWebView2.NewWindowRequested -= CoreWebView2_NewWindowRequested;
-            WebView2.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-            WebView2.CoreWebView2.DocumentTitleChanged -= CoreWebView2_DocumentTitleChanged;
-            WebView2.CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged;
-            WebView2.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
-            WebView2.CoreWebView2.AddWebResourceRequestedFilter("*.m3u8", CoreWebView2WebResourceContext.All);
-        }
-
-        private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
-        {
-            var m3u8r = new M3U8ResourceInfo();
-            System.Diagnostics.Trace.WriteLine($"Web Resource Request: {e.Request.Uri}");
-            m3u8r.Url = e.Request.Uri;
-            foreach (var kv in e.Request.Headers)
-            {
-                m3u8r.RequestHeaders[kv.Key] = kv.Value;
-            }
-
-            M3U8Resources.Add(m3u8r);
-        }
-
         private void CoreWebView2_DocumentTitleChanged(object sender, object e)
         {
             Title = WebView2.CoreWebView2.DocumentTitle;
@@ -124,6 +103,19 @@ namespace M3U8Explorer.Web
                 return;
             }
             NewWindowRequested?.Invoke(this, e);
+        }
+
+        private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+        {
+            var m3u8r = new M3U8ResourceInfo();
+            System.Diagnostics.Trace.WriteLine($"Web Resource Request: {e.Request.Uri}");
+            m3u8r.Url = e.Request.Uri;
+            foreach (var kv in e.Request.Headers)
+            {
+                m3u8r.RequestHeaders[kv.Key] = kv.Value;
+            }
+
+            M3U8Resources.Add(m3u8r);
         }
 
         private void OnRequestBack()
@@ -143,11 +135,31 @@ namespace M3U8Explorer.Web
             WebView2.CoreWebView2.Navigate(dstUrl);
         }
 
+        private void OnRequestOpResList(IEnumerable<M3U8ResourceInfo> enumerable)
+        {
+            var resWin = new ResListView(enumerable);
+            resWin.Owner = Application.Current.MainWindow;
+            resWin.ShowDialog();
+        }
+
         private void RefreshButtonState()
         {
             GoBackCommand.NotifyCanExecuteChanged();
             GoForwardCommand.NotifyCanExecuteChanged();
             RefreshCommand.NotifyCanExecuteChanged();
+        }
+
+        private void Webbrowser_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            if (!e.IsSuccess)
+                return;
+
+            WebView2.CoreWebView2.NewWindowRequested -= CoreWebView2_NewWindowRequested;
+            WebView2.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
+            WebView2.CoreWebView2.DocumentTitleChanged -= CoreWebView2_DocumentTitleChanged;
+            WebView2.CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged;
+            WebView2.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
+            WebView2.CoreWebView2.AddWebResourceRequestedFilter("*.m3u8", CoreWebView2WebResourceContext.All);
         }
 
         private void Webbrowser_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)

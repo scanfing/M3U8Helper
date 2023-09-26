@@ -98,6 +98,8 @@
                                         Height="24"
                                         Margin="2"
                                         BorderThickness="0"
+                                        Command="{Binding OpenResListViewCommand}"
+                                        CommandParameter="{Binding M3U8Resources}"
                                         Content="{Binding M3U8Resources.Count}" />
                             </Grid>
                         </Border>
