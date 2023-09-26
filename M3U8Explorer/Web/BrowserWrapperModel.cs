@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using M3U8Explorer.Models;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,10 @@ namespace M3U8Explorer.Web
 
         public BrowserWrapperModel(WebView2 webbrowser)
         {
+            M3U8Resources = new ObservableCollection<M3U8ResourceInfo>();
+
             _webView = webbrowser;
+            webbrowser.CoreWebView2InitializationCompleted += Webbrowser_CoreWebView2InitializationCompleted;
             webbrowser.NavigationStarting += Webbrowser_NavigationStarting;
             webbrowser.NavigationCompleted += Webbrowser_NavigationCompleted;
 
@@ -61,6 +66,8 @@ namespace M3U8Explorer.Web
 
         public WebView2 WebView2 => _webView;
 
+        public ObservableCollection<M3U8ResourceInfo> M3U8Resources { get; private set; }
+
         #endregion Properties
 
         #region Methods
@@ -77,6 +84,32 @@ namespace M3U8Explorer.Web
             WebView2.Reload();
         }
 
+        private void Webbrowser_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        {
+            if (!e.IsSuccess)
+                return;
+
+            WebView2.CoreWebView2.NewWindowRequested -= CoreWebView2_NewWindowRequested;
+            WebView2.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
+            WebView2.CoreWebView2.DocumentTitleChanged -= CoreWebView2_DocumentTitleChanged;
+            WebView2.CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged;
+            WebView2.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
+            WebView2.CoreWebView2.AddWebResourceRequestedFilter("*.m3u8", CoreWebView2WebResourceContext.All);
+        }
+
+        private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+        {
+            var m3u8r = new M3U8ResourceInfo();
+            System.Diagnostics.Trace.WriteLine($"Web Resource Request: {e.Request.Uri}");
+            m3u8r.Url = e.Request.Uri;
+            foreach (var kv in e.Request.Headers)
+            {
+                m3u8r.RequestHeaders[kv.Key] = kv.Value;
+            }
+
+            M3U8Resources.Add(m3u8r);
+        }
+
         private void CoreWebView2_DocumentTitleChanged(object sender, object e)
         {
             Title = WebView2.CoreWebView2.DocumentTitle;
@@ -89,7 +122,7 @@ namespace M3U8Explorer.Web
             {
                 e.Handled = true;
                 return;
-            }        
+            }
             NewWindowRequested?.Invoke(this, e);
         }
 
@@ -118,15 +151,11 @@ namespace M3U8Explorer.Web
 
             Title = webbrowser.CoreWebView2.DocumentTitle;
             RefreshButtonState();
-
-            webbrowser.CoreWebView2.NewWindowRequested -= CoreWebView2_NewWindowRequested;
-            webbrowser.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-            webbrowser.CoreWebView2.DocumentTitleChanged -= CoreWebView2_DocumentTitleChanged;
-            webbrowser.CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged;
         }
 
         private void Webbrowser_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
+            M3U8Resources.Clear();
             RefreshButtonState();
         }
 

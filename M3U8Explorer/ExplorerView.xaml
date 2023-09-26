@@ -98,7 +98,7 @@
                                         Height="24"
                                         Margin="2"
                                         BorderThickness="0"
-                                        Content="=" />
+                                        Content="{Binding M3U8Resources.Count}" />
                             </Grid>
                         </Border>
                         <ContentControl Grid.Row="1" Content="{Binding WebView2}" />
