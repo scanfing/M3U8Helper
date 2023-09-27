@@ -41,7 +41,7 @@ namespace M3U8Explorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.CreateNewBrowser("http://www.baidu.com");
+            viewModel.CreateNewBrowser("https://v.cctv.com/");
         }
 
         #endregion Methods

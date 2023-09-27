@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:M3U8Downloader.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:M3U8Downloader.ViewModels"
         Title="{DynamicResource String_M3U8DownloaderText}"
         Width="750"
         Height="550"
@@ -17,6 +18,9 @@
     <Window.Resources>
         <cvt:BytesValueConverter x:Key="bytecvt" />
     </Window.Resources>
+    <Window.DataContext>
+        <viewmodels:DownloadViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="30" />
@@ -338,6 +342,9 @@
                                          Text="{Binding M3U8Content}" />
                             </ScrollViewer>
                         </Grid>
+                    </TabItem>
+                    <TabItem Header="{DynamicResource String_Http_Header}">
+                        <DataGrid ItemsSource="{Binding SelectedM3U8.HttpHeaders}" />
                     </TabItem>
                 </TabControl>
             </Grid>

@@ -2,6 +2,7 @@
 using System.Linq;
 using M3U8Helper.Core;
 using M3U8Downloader.Infrastruction;
+using System.Collections.ObjectModel;
 
 namespace M3U8Downloader.Model
 {
@@ -62,6 +63,8 @@ namespace M3U8Downloader.Model
 
         public M3U8Head Head { get; private set; }
 
+        public ObservableCollection<KeyValuePair<string, string>> HttpHeaders { get; private set; } = new ObservableCollection<KeyValuePair<string, string>>();
+
         public bool IgnoreCombineError
         {
             get => _ignoreCombineError;
@@ -93,6 +96,7 @@ namespace M3U8Downloader.Model
         }
 
         public List<M3U8Segment> Segments { get; private set; }
+
         public string SourceUrl { get; private set; }
 
         public string StateText

@@ -7,6 +7,7 @@
     <s:String x:Key="String_Head">头部数据</s:String>
     <s:String x:Key="String_Segments">视频片段</s:String>
     <s:String x:Key="String_Content">文本内容</s:String>
+    <s:String x:Key="String_Http_Header">Http请求头</s:String>
 
     <s:String x:Key="String_LblSourceText">源地址:</s:String>
     <s:String x:Key="String_LblFixUrlText">修正地址:</s:String>

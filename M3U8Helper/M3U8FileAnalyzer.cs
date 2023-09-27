@@ -106,7 +106,7 @@ namespace M3U8Helper
             return null;
         }
 
-        public static M3U8File[] AnalyzeM3U8Url(string url)
+        public static M3U8File[] AnalyzeM3U8Url(string url, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             if (url.EndsWith("/"))
             {
@@ -114,6 +114,13 @@ namespace M3U8Helper
             }
             var uri = new Uri(url);
             WebClient wclient = new WebClient();
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    wclient.Headers.Add(header.Key, header.Value);
+                }
+            }
             var content = wclient.DownloadString(uri);
             if (content.Contains(".m3u8"))
             {

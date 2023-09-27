@@ -145,6 +145,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Downloader\M3U8Downloader.csproj">
+      <Project>{ffc756c4-375b-48f3-a201-d938874dbcfa}</Project>
+      <Name>M3U8Downloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\M3U8Helper\M3U8Helper.csproj">
       <Project>{4a5902fc-9e9c-42d5-9825-57be6d22a1c0}</Project>
       <Name>M3U8Helper</Name>

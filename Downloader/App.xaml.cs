@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using M3U8Downloader.Helpers;
+using System.Windows;
 
 namespace M3U8Downloader
 {
@@ -7,5 +8,10 @@ namespace M3U8Downloader
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            StartArgsHelper.StartArgs = e.Args;
+            base.OnStartup(e);
+        }
     }
 }

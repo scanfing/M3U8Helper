@@ -14,6 +14,8 @@ using M3U8Downloader.Infrastruction;
 using M3U8Downloader.Model;
 using Microsoft.Win32;
 using M3U8Helper;
+using M3U8Downloader.Helpers;
+using Newtonsoft.Json;
 
 namespace M3U8Downloader.ViewModels
 {
@@ -22,18 +24,27 @@ namespace M3U8Downloader.ViewModels
         #region Fields
 
         private static long count = 0;
+
         private readonly Dictionary<M3U8FileModel, CancellationTokenSource> _canceltokenDic;
+
         private string _curUrl = string.Empty;
+
         private DownloadHelper _downloader;
+
         private string _fixUrl = "";
+
         private bool _isAnalyzing = false;
 
         private bool _isKeepM3U8ContentSrcUrl = true;
 
         private string _m3U8Content = "";
+
         private SaveFileDialog _saveFileDialog;
+
         private string _savePath = "";
+
         private M3U8FileModel _selectedM3U8 = null;
+
         private M3U8Segment _selectedNode = null;
 
         private string _selectedNodeFullPath = "";
@@ -165,6 +176,49 @@ namespace M3U8Downloader.ViewModels
         #endregion Properties
 
         #region Methods
+
+        public void AnalyzeStartArgs()
+        {
+            var arsg = StartArgsHelper.StartArgs;
+            foreach (var arg in arsg)
+            {
+                if (arg != null)
+                {
+                    if (arg.StartsWith("--json="))
+                    {
+                        var tmpJsonStr = arg.Replace("--json=", "");
+                        var resInfo = JsonConvert.DeserializeObject<M3U8ResourceInfo>(tmpJsonStr);
+                        AnalyzeM3U8Resource(resInfo);
+                    }
+                }
+            }
+        }
+
+        private async void AnalyzeM3U8Resource(M3U8ResourceInfo resInfo)
+        {
+            CurrUrl = resInfo.Url;
+            var m3s = await Task.Factory.StartNew(() => M3U8FileAnalyzer.AnalyzeM3U8Url(resInfo.Url, resInfo.RequestHeaders));
+            foreach (var m in m3s)
+            {
+                count++;
+                var mm = new M3U8FileModel(m)
+                {
+                    SavePath = Path.Combine(SavePath, $"{DateTime.Now.ToString("yyyyMMddHHmmss")}")
+                };
+                foreach (var header in resInfo.RequestHeaders)
+                {
+                    mm.HttpHeaders.Add(header);
+                }
+                var rcount = 1;
+                var ofile = Path.GetFileNameWithoutExtension(mm.DisplayName);
+                while (M3U8Source.Any(p => p.DisplayName == mm.DisplayName))
+                {
+                    mm.DisplayName = ofile + $"({rcount})" + Path.GetExtension(mm.DisplayName);
+                    rcount++;
+                }
+                M3U8Source.Add(mm);
+            }
+        }
 
         private bool CanAbortDownload()
         {
