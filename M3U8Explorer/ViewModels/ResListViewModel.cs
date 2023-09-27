@@ -1,20 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using M3U8Helper.Core;
+using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using M3U8Explorer.Models;
+using System.Diagnostics;
+using System.IO;
 
 namespace M3U8Explorer.ViewModels
 {
     public class ResListViewModel : ObservableObject
     {
+        #region Fields
+
+        private ObservableCollection<M3U8ResourceInfo> _resInfos= new ObservableCollection<M3U8ResourceInfo>();
+
+        #endregion Fields
+
+        #region Constructors
+
         public ResListViewModel()
         {
-            ResourceInfos = new ObservableCollection<M3U8ResourceInfo>();
+            DownloadResCommand = new RelayCommand<M3U8ResourceInfo>(OnRequestDownloadM3u8, CanDownload);
         }
-        public ObservableCollection<M3U8ResourceInfo> ResourceInfos { get; private set; }
+
+        private void OnRequestDownloadM3u8(M3U8ResourceInfo info)
+        {
+            var cmdStr = JsonConvert.SerializeObject(info);
+            var downloadfilePath = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "M3U8Downloader.exe");
+            if (!File.Exists(downloadfilePath))
+                return;
+            Process.Start(downloadfilePath, cmdStr);
+        }
+
+        private bool CanDownload(M3U8ResourceInfo obj)
+        {
+            return true;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public ObservableCollection<M3U8ResourceInfo> ResourceInfos
+        {
+            get => _resInfos;
+            set => SetProperty(ref _resInfos, value);
+        }
+
+
+        public RelayCommand<M3U8ResourceInfo> DownloadResCommand { get; private set; }
+
+        #endregion Properties
     }
 }

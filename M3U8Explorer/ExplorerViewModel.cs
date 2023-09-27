@@ -18,7 +18,7 @@ namespace M3U8Explorer
     {
         #region Fields
 
-        private BrowserWrapperModel _currentBrowser;
+        private BrowserModel _currentBrowser;
 
         #endregion Fields
 
@@ -26,20 +26,20 @@ namespace M3U8Explorer
 
         public ExplorerViewModel()
         {
-            Browsers = new ObservableCollection<BrowserWrapperModel>();
+            Browsers = new ObservableCollection<BrowserModel>();
 
-            CloseBorwserPageCommand = new RelayCommand<BrowserWrapperModel>(OnRequestClosePage, (e) => true);
+            CloseBorwserPageCommand = new RelayCommand<BrowserModel>(OnRequestClosePage, (e) => true);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public ObservableCollection<BrowserWrapperModel> Browsers { get; private set; }
+        public ObservableCollection<BrowserModel> Browsers { get; private set; }
 
         public ICommand CloseBorwserPageCommand { get; private set; }
 
-        public BrowserWrapperModel CurrentBrowser
+        public BrowserModel CurrentBrowser
         {
             get => _currentBrowser;
             set => SetProperty(ref _currentBrowser, value);
@@ -51,10 +51,10 @@ namespace M3U8Explorer
 
         #region Methods
 
-        public BrowserWrapperModel CreateNewBrowser(string url)
+        public BrowserModel CreateNewBrowser(string url)
         {
             WebView2 browser = new WebView2();
-            var wrapper = new BrowserWrapperModel(browser);
+            var wrapper = new BrowserModel(browser);
             InitBorwser(wrapper);
             Browsers.Add(wrapper);
             CurrentBrowser = wrapper;
@@ -62,12 +62,12 @@ namespace M3U8Explorer
             return wrapper;
         }
 
-        private void InitBorwser(BrowserWrapperModel webbrowser)
+        private void InitBorwser(BrowserModel webbrowser)
         {
             webbrowser.NewWindowRequested += WebView2_NewWindowRequested;
         }
 
-        private void OnRequestClosePage(BrowserWrapperModel webbrowser)
+        private void OnRequestClosePage(BrowserModel webbrowser)
         {
             if (webbrowser is null)
                 return;

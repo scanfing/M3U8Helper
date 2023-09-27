@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using M3U8Explorer.Models;
+using M3U8Helper.Core;
 using M3U8Explorer.Views;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace M3U8Explorer.Web
 {
-    public class BrowserWrapperModel : ObservableObject
+    public class BrowserModel : ObservableObject
     {
         #region Fields
 
@@ -27,7 +27,7 @@ namespace M3U8Explorer.Web
 
         #region Constructors
 
-        public BrowserWrapperModel(WebView2 webbrowser)
+        public BrowserModel(WebView2 webbrowser)
         {
             M3U8Resources = new ObservableCollection<M3U8ResourceInfo>();
 
@@ -40,7 +40,7 @@ namespace M3U8Explorer.Web
             GoForwardCommand = new RelayCommand(OnRequestForward, () => WebView2.CanGoForward);
             RefreshCommand = new RelayCommand(OnRequestRefresh, () => WebView2.IsLoaded);
             OpenUrlInCurrBrowserCommand = new RelayCommand<string>(OnRequestOpenUrlInCurrBrowser, (e) => true);
-            OpenResListViewCommand = new RelayCommand<IEnumerable<M3U8ResourceInfo>>(OnRequestOpResList, (e) => true);
+            OpenResListViewCommand = new RelayCommand<ObservableCollection<M3U8ResourceInfo>>(OnRequestOpResList, (e) => true);
         }
 
         #endregion Constructors
@@ -59,7 +59,7 @@ namespace M3U8Explorer.Web
 
         public ObservableCollection<M3U8ResourceInfo> M3U8Resources { get; private set; }
 
-        public RelayCommand<IEnumerable<M3U8ResourceInfo>> OpenResListViewCommand { get; private set; }
+        public RelayCommand<ObservableCollection<M3U8ResourceInfo>> OpenResListViewCommand { get; private set; }
 
         public RelayCommand<string> OpenUrlInCurrBrowserCommand { get; private set; }
 
@@ -135,7 +135,7 @@ namespace M3U8Explorer.Web
             WebView2.CoreWebView2.Navigate(dstUrl);
         }
 
-        private void OnRequestOpResList(IEnumerable<M3U8ResourceInfo> enumerable)
+        private void OnRequestOpResList(ObservableCollection<M3U8ResourceInfo> enumerable)
         {
             var resWin = new ResListView(enumerable);
             resWin.Owner = Application.Current.MainWindow;

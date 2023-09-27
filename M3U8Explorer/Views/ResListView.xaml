@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:M3U8Explorer.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:M3U8Explorer.ViewModels"
+        x:Name="Self"
         Title="ResListView"
         Width="800"
         Height="450"
@@ -18,9 +19,19 @@
                   IsReadOnly="True"
                   ItemsSource="{Binding ResourceInfos}">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="1*"
-                                    Binding="{Binding Url}"
-                                    Header="地址" />
+                <DataGridTemplateColumn Width="1*" Header="地址">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox VerticalContentAlignment="Center"
+                                     AcceptsReturn="True"
+                                     BorderThickness="0"
+                                     IsReadOnly="True"
+                                     Text="{Binding Url}"
+                                     TextWrapping="NoWrap"
+                                     ToolTip="{Binding Url}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="120" Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -35,6 +46,8 @@
                                         Content="导出" />
                                 <Button Grid.Column="1"
                                         BorderThickness="0"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}, AncestorLevel=1}, Path=DataContext.DownloadResCommand}"
+                                        CommandParameter="{Binding}"
                                         Content="下载" />
                             </Grid>
                         </DataTemplate>

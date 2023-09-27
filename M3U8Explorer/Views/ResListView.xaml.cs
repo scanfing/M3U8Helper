@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using M3U8Explorer.Models;
+using M3U8Helper.Core;
 using M3U8Explorer.ViewModels;
 
 namespace M3U8Explorer.Views
@@ -22,16 +23,12 @@ namespace M3U8Explorer.Views
     public partial class ResListView : Window
     {
         private ResListViewModel _viewModel;
-        public ResListView(IEnumerable<M3U8ResourceInfo> resList)
+        public ResListView(ObservableCollection<M3U8ResourceInfo> resList)
         {
             InitializeComponent();
             _viewModel =DataContext as ResListViewModel;
 
-            _viewModel.ResourceInfos.Clear();
-            foreach(var resourceInfo in resList)
-            {
-                _viewModel.ResourceInfos.Add(resourceInfo);
-            }
+            _viewModel.ResourceInfos = resList;
         }
     }
 }

@@ -92,12 +92,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\M3U8ResourceInfo.cs" />
     <Compile Include="ViewModels\ResListViewModel.cs" />
     <Compile Include="Views\ResListView.xaml.cs">
       <DependentUpon>ResListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Web\BrowserWrapperModel.cs" />
+    <Compile Include="Web\BrowserModel.cs" />
     <Compile Include="Web\WebEnvInfoService.cs" />
     <Compile Include="Web\WebUtil.cs" />
     <Page Include="ExplorerView.xaml">
@@ -145,7 +144,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\M3U8Helper\M3U8Helper.csproj">
+      <Project>{4a5902fc-9e9c-42d5-9825-57be6d22a1c0}</Project>
+      <Name>M3U8Helper</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2045.28\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2045.28\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
