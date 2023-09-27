@@ -184,11 +184,14 @@ namespace M3U8Downloader.ViewModels
             {
                 if (arg != null)
                 {
-                    if (arg.StartsWith("--json="))
+                    var tmpJsonStr = arg.Replace("--json=", "");
+                    try
                     {
-                        var tmpJsonStr = arg.Replace("--json=", "");
                         var resInfo = JsonConvert.DeserializeObject<M3U8ResourceInfo>(tmpJsonStr);
                         AnalyzeM3U8Resource(resInfo);
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
             }
@@ -355,9 +358,9 @@ namespace M3U8Downloader.ViewModels
             model.IsDownloading = true;
             M3U8DownloadResult rt;
             if (model.DownloadInSequence)
-                rt = await _downloader.DownloadM3U8VideoFilesAsync(target, model.SavePath, token.Token, model.IsSkipExistFile);
+                rt = await _downloader.DownloadM3U8VideoFilesAsync(target, model.SavePath, token.Token, model.IsSkipExistFile, model.HttpHeaders);
             else
-                rt = await _downloader.DownloadM3U8FilesAsParallel(target, model.SavePath, token.Token, model.IsSkipExistFile);
+                rt = await _downloader.DownloadM3U8FilesAsParallel(target, model.SavePath, token.Token, model.IsSkipExistFile, model.HttpHeaders);
             model.IsDownloading = false;
             model.StateText = $"{DateTime.Now} Download Complete!";
             StateText = $"{DateTime.Now} {model.DisplayName} Download Complete! [{path}]";

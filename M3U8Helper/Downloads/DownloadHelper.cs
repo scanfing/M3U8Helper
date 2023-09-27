@@ -91,6 +91,7 @@ namespace M3U8Helper.Downloads
                 {
                     client = new WebClient();
                 }
+
                 client.DownloadFile(node.Target, file);
                 if (File.Exists(file))
                 {
@@ -107,7 +108,7 @@ namespace M3U8Helper.Downloads
             }
         }
 
-        public static async Task DownloadM3U8SegmentsAsParallel(IEnumerable<M3U8Segment> segments, string savedir, CancellationToken token, bool skipexistfile = true, Action<M3U8Segment, bool> downloadaction = null)
+        public static async Task DownloadM3U8SegmentsAsParallel(IEnumerable<M3U8Segment> segments, string savedir, CancellationToken token, bool skipexistfile = true, Action<M3U8Segment, bool> downloadaction = null, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             var lst = segments.ToList().OrderBy(p => p.SegmentName);
             var concurrentBag = new ConcurrentBag<M3U8Segment>(lst);
@@ -121,6 +122,13 @@ namespace M3U8Helper.Downloads
             for (var c = 0; c < 3; c++)
             {
                 var client = new WebClient();
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                    {
+                        client.Headers.Add(header.Key, header.Value);
+                    }
+                }
                 var t = Task.Factory.StartNew(() =>
                    {
                        while (concurrentBag.TryTake(out var node))
@@ -136,7 +144,7 @@ namespace M3U8Helper.Downloads
             await Task.WhenAll(tlst);
         }
 
-        public async Task<M3U8DownloadResult> DownloadM3U8FilesAsParallel(M3U8File mfile, string savedir, CancellationToken token, bool skipexistfile = true)
+        public async Task<M3U8DownloadResult> DownloadM3U8FilesAsParallel(M3U8File mfile, string savedir, CancellationToken token, bool skipexistfile = true, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             var result = new M3U8DownloadResult();
             try
@@ -159,7 +167,7 @@ namespace M3U8Helper.Downloads
                       };
                       OnReport(e);
                   });
-                await DownloadM3U8SegmentsAsParallel(mfile.Segments, savedir, token, skipexistfile, action);
+                await DownloadM3U8SegmentsAsParallel(mfile.Segments, savedir, token, skipexistfile, action, headers);
             }
             catch (Exception ex)
             {
@@ -173,7 +181,7 @@ namespace M3U8Helper.Downloads
         /// </summary>
         /// <param name="target"></param>
         /// <param name="savedir"></param>
-        public async Task<M3U8DownloadResult> DownloadM3U8VideoFilesAsync(M3U8File target, string savedir, CancellationToken token, bool skipexistsegment = false)
+        public async Task<M3U8DownloadResult> DownloadM3U8VideoFilesAsync(M3U8File target, string savedir, CancellationToken token, bool skipexistsegment = false, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             var result = new M3U8DownloadResult();
             try
@@ -194,7 +202,7 @@ namespace M3U8Helper.Downloads
                     OnReport(arg);
                     token.ThrowIfCancellationRequested();
                 });
-                result.IsCancelled = await DownloadM3U8VideoSegments(target.Segments, savedir, skipexistsegment, action);
+                result.IsCancelled = await DownloadM3U8VideoSegments(target.Segments, savedir, skipexistsegment, action, headers);
                 if (!result.IsCancelled)
                 {
                     result.IsComplete = true;
@@ -207,11 +215,18 @@ namespace M3U8Helper.Downloads
             return result;
         }
 
-        public async Task<bool> DownloadM3U8VideoSegments(M3U8Segment[] nodes, string savedir, bool skipexistfile = false, Action<M3U8Segment, bool> segmentdownloadedaction = null)
+        public async Task<bool> DownloadM3U8VideoSegments(M3U8Segment[] nodes, string savedir, bool skipexistfile = false, Action<M3U8Segment, bool> segmentdownloadedaction = null, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             var cancel = false;
             using (var client = new WebClient())
             {
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                    {
+                        client.Headers.Add(header.Key, header.Value);
+                    }
+                }
                 foreach (var node in nodes)
                 {
                     try
