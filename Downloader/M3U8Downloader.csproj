@@ -110,13 +110,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\M3U8Helper\M3U8Helper.csproj">
       <Project>{4a5902fc-9e9c-42d5-9825-57be6d22a1c0}</Project>
       <Name>M3U8Helper</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

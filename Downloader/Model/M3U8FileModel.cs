@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AuxiliaryTools.M3U8;
+using M3U8Helper.Core;
 using M3U8Downloader.Infrastruction;
 
 namespace M3U8Downloader.Model

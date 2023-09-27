@@ -8,10 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using AuxiliaryTools.M3U8;
+using M3U8Helper.Core;
+using M3U8Helper.Downloads;
 using M3U8Downloader.Infrastruction;
 using M3U8Downloader.Model;
 using Microsoft.Win32;
+using M3U8Helper;
 
 namespace M3U8Downloader.ViewModels
 {
@@ -265,7 +267,7 @@ namespace M3U8Downloader.ViewModels
 
         private async void OnCombineM3U8Segments(M3U8FileModel model)
         {
-            var rt = await M3U8Helper.CombineM3U8Segments(model.SourceTarget, model.SavePath, model.CombinedFile, OnCombineProgressChanged, model.IgnoreCombineError);
+            var rt = await M3U8Helper.M3U8Helper.CombineM3U8Segments(model.SourceTarget, model.SavePath, model.CombinedFile, OnCombineProgressChanged, model.IgnoreCombineError);
             var msg = $"Combine: {rt.IsComplete}";
             StateText = $"{model.SavePath} Combine: {rt.IsComplete}";
             if (rt.IsComplete)
@@ -326,7 +328,7 @@ namespace M3U8Downloader.ViewModels
         {
             if (SelectedM3U8 != null)
             {
-                M3U8Content = M3U8Helper.GetM3U8Content(SelectedM3U8.SourceTarget, IsKeepM3U8ContentSrcUrl);
+                M3U8Content = M3U8Helper.M3U8Helper.GetM3U8Content(SelectedM3U8.SourceTarget, IsKeepM3U8ContentSrcUrl);
             }
         }
 
