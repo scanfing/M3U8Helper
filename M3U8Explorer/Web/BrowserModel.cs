@@ -107,8 +107,12 @@ namespace M3U8Explorer.Web
 
         private void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
         {
-            var m3u8r = new M3U8ResourceInfo();
             System.Diagnostics.Trace.WriteLine($"Web Resource Request: {e.Request.Uri}");
+            if (!e.Request.Uri.ToLower().Contains(".m3u8"))
+            {
+                return;
+            }
+            var m3u8r = new M3U8ResourceInfo();
             m3u8r.Url = e.Request.Uri;
             foreach (var kv in e.Request.Headers)
             {
@@ -116,6 +120,11 @@ namespace M3U8Explorer.Web
             }
 
             M3U8Resources.Add(m3u8r);
+        }
+
+        private void CoreWebView2_WebResourceResponseReceived(object sender, CoreWebView2WebResourceResponseReceivedEventArgs e)
+        {
+            System.Diagnostics.Trace.WriteLine($"Web Resource Response: {e.Request.Uri}");
         }
 
         private void OnRequestBack()
@@ -158,8 +167,12 @@ namespace M3U8Explorer.Web
             WebView2.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
             WebView2.CoreWebView2.DocumentTitleChanged -= CoreWebView2_DocumentTitleChanged;
             WebView2.CoreWebView2.DocumentTitleChanged += CoreWebView2_DocumentTitleChanged;
+
             WebView2.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
+            WebView2.CoreWebView2.WebResourceResponseReceived += CoreWebView2_WebResourceResponseReceived;
+
             WebView2.CoreWebView2.AddWebResourceRequestedFilter("*.m3u8", CoreWebView2WebResourceContext.All);
+            WebView2.CoreWebView2.AddWebResourceRequestedFilter("*.ts", CoreWebView2WebResourceContext.All);
         }
 
         private void Webbrowser_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
