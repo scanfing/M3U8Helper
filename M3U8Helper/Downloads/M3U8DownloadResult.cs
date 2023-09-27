@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using M3U8Helper.Core;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper.Downloads
 {
     public class M3U8DownloadResult : OperateResult
     {

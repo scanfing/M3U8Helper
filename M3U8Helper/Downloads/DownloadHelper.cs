@@ -6,8 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using M3U8Helper.Core;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper.Downloads
 {
     public class DownloadHelper : Progress<M3U8VideoDownloadProgressChangedArgs>
     {

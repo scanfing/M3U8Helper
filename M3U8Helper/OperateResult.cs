@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper
 {
     public class OperateResult
     {

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using M3U8Helper.Core;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper
 {
     public class M3U8FileAnalyzer
     {

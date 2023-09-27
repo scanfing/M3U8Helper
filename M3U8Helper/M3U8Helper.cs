@@ -1,4 +1,5 @@
-﻿using System;
+﻿using M3U8Helper.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper
 {
     public class M3U8Helper
     {

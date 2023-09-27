@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper.Core
 {
     public class M3U8SegmentsCombineProgressChangedEventArgs : EventArgs
     {

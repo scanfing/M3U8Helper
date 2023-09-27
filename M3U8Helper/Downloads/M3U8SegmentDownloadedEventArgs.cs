@@ -1,6 +1,7 @@
-﻿using System;
+﻿using M3U8Helper.Core;
+using System;
 
-namespace AuxiliaryTools.M3U8
+namespace M3U8Helper.Downloads
 {
     public class M3U8SegmentDownloadedEventArgs : EventArgs
     {

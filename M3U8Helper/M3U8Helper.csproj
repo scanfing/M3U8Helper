@@ -7,7 +7,7 @@
     <ProjectGuid>{4A5902FC-9E9C-42D5-9825-57BE6D22A1C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AuxiliaryTools.M3U8</RootNamespace>
+    <RootNamespace>M3U8Helper</RootNamespace>
     <AssemblyName>M3U8Helper</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -54,10 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\M3U8Head.cs" />
-    <Compile Include="Download\M3U8SegmentDownloadedEventArgs.cs" />
-    <Compile Include="Download\DownloadHelper.cs" />
-    <Compile Include="Download\M3U8DownloadResult.cs" />
-    <Compile Include="Download\M3U8VideoDownloadProgressChangedArgs.cs" />
+    <Compile Include="Core\M3U8ResourceInfo.cs" />
+    <Compile Include="Downloads\M3U8SegmentDownloadedEventArgs.cs" />
+    <Compile Include="Downloads\DownloadHelper.cs" />
+    <Compile Include="Downloads\M3U8DownloadResult.cs" />
+    <Compile Include="Downloads\M3U8VideoDownloadProgressChangedArgs.cs" />
     <Compile Include="M3U8FileAnalyzer.cs" />
     <Compile Include="M3U8Helper.cs" />
     <Compile Include="Core\M3U8File.cs" />
